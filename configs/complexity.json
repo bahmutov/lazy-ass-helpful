@@ -1,0 +1,12 @@
+{
+  "all": {
+    "src": ["qunit-helpful.js", "test/*.js"],
+    "options": {
+      "errorsOnly": false,
+      "breakOnErrors": false,
+      "cyclomatic": 4,
+      "halstead": 12,
+      "maintainability": 70
+    }
+  }
+}
