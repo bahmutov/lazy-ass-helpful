@@ -2,6 +2,8 @@ var check = require('check-types');
 var falafel = require('falafel');
 
 (function (env) {
+  var _assertionName = 'lazyAss';
+
   function rewriteLazyAssMessage(okStatement) {
     var conditionNode = okStatement.expression.arguments[0];
     var condition = conditionNode.source();
@@ -20,7 +22,7 @@ var falafel = require('falafel');
   }
 
   function isLazyAss(statement) {
-    return statement.expression.callee.name === 'lazyAss';
+    return statement.expression.callee.name === _assertionName;
   }
 
   function rewriteTestFunction(node) {
@@ -37,15 +39,18 @@ var falafel = require('falafel');
     }
   }
 
-  function wrapSingleFunction(fn) {
+  function wrapSingleFunction(fn, assertionName) {
     check.verify.fn(fn, 'Expected a function');
+    _assertionName = assertionName || 'lazyAss';
+    check.verify.unemptyString(_assertionName,
+      'invalid assertion name', _assertionName);
 
     var wrapped = function () {
       var testSource = fn.toString();
       // console.log('test source', testSource);
-      if (!fn.name) {
-        testSource = '(' + testSource + ')';
-      }
+      // if (!fn.name) {
+      testSource = '(' + testSource + ')';
+      //}
       //check.verify.unemptyString(fn.name,
       //  'for now qunit-helpful needs test function to have a name');
       var output = falafel(testSource, rewriteTestFunction);
@@ -58,14 +63,14 @@ var falafel = require('falafel');
     return wrapped;
   }
 
-  function wrapMethod(o, name) {
+  function wrapMethod(o, name, assertionName) {
     var method = o[name];
     check.verify.fn(method, 'expected method ' + name + ' in object');
     var wrapped = function () {
       var args = Array.prototype.slice.call(arguments, 0);
       args = args.map(function (a) {
         if (check.fn(a)) {
-          a = wrapSingleFunction(a);
+          a = wrapSingleFunction(a, assertionName);
         }
         return a;
       });
@@ -75,11 +80,11 @@ var falafel = require('falafel');
     return wrapped;
   }
 
-  env.lazyAssHelpful = function (a1, a2) {
+  env.lazyAssHelpful = function (a1, a2, a3) {
     if (check.fn(a1)) {
-      return wrapSingleFunction(a1);
+      return wrapSingleFunction(a1, a2);
     } else if (check.object(a1) && check.unemptyString(a2)) {
-      return wrapMethod(a1, a2);
+      return wrapMethod(a1, a2, a3);
     } else {
       throw new Error('Do not know how to handle arguments ' + a1 + ',' + a2);
     }

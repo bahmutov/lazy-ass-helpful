@@ -36,6 +36,54 @@
 
 }());
 
+(function (root) {
+  QUnit.module('lazy-ass-helpful a function with given name');
+
+  root.bar = lazyAss;
+  if (typeof lazyAss !== 'function') {
+    throw new Error('lazyAss is undefined');
+  }
+
+  function foo() {
+    /* global bar */
+    bar('some' + 'thing' === 'ss');
+  }
+
+  QUnit.test('changed bar name', 2, function () {
+    var _foo = lazyAssHelpful(foo, 'bar');
+    QUnit.equal(typeof _foo, 'function');
+    QUnit.throws(_foo, /ss/, 'throws exception with condition source');
+  });
+}(typeof window !== 'undefined' ? window : global));
+
+(function (root) {
+  QUnit.module('lazy-ass-helpful wrap a method with custom assertion');
+
+  root.bar = lazyAss;
+  if (typeof lazyAss !== 'function') {
+    throw new Error('lazyAss is undefined');
+  }
+
+  var env = {
+    run: function (name, fn) {
+      console.log('running', name);
+      fn();
+    }
+  };
+
+  function foo() {
+    /* global bar */
+    bar('some' + 'thing' === 'ss');
+  }
+
+  QUnit.test('running method', 1, function () {
+    lazyAssHelpful(env, 'run', 'bar');
+    QUnit.throws(function () {
+      env.run('test foo', foo);
+    }, /ss/, 'has helpful condition source');
+  });
+}(typeof window !== 'undefined' ? window : global));
+
 (function () {
   QUnit.module('lazy-ass-helpful wraps any function passed to an object method');
 
