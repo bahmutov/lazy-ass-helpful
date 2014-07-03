@@ -75,6 +75,8 @@ module.exports = function (grunt) {
         'README.md',
         'lazy-ass-helpful-browser.js',
         'lazy-ass-helpful-bdd.js',
+        'node_modules/mocha/mocha.css',
+        'node_modules/mocha/mocha.js',
         'node_modules/lazy-ass/index.js',
         'test/*.js'
       ]
