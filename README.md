@@ -11,6 +11,11 @@
 [![dependencies][lazy-ass-helpful-dependencies-image]][lazy-ass-helpful-dependencies-url]
 [![devdependencies][lazy-ass-helpful-devdependencies-image]][lazy-ass-helpful-devdependencies-url]
 
+Stop writing assertion messages, let the automatic on the fly code rewriting
+put the entire expression into the text message.
+
+![lazy-ass-helpful-bdd](images/lazy-ass-helpful-bdd.png)
+
 ## Small print
 
 Author: Gleb Bahmutov &copy; 2014 @bahmutov
