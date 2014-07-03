@@ -71,8 +71,10 @@ module.exports = function (grunt) {
       },
       src: [
         'index.html',
+        'index-mocha.html',
         'README.md',
         'lazy-ass-helpful-browser.js',
+        'node_modules/lazy-ass/index.js',
         'test/*.js'
       ]
     }
