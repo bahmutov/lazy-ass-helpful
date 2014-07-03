@@ -2,6 +2,15 @@
 
 > lazy-ass plugin to automatically show helpful info for failed assertions
 
+[Test page](http://glebbahmutov.com/lazy-ass-helpful/),
+[tests with variable injection](http://glebbahmutov.com/lazy-ass-helpful/index-with-inject.html)
+
+[![NPM][lazy-ass-helpful-icon]][lazy-ass-helpful-url]
+
+[![Build status][lazy-ass-helpful-ci-image]][lazy-ass-helpful-ci-url]
+[![dependencies][lazy-ass-helpful-dependencies-image]][lazy-ass-helpful-dependencies-url]
+[![devdependencies][lazy-ass-helpful-devdependencies-image]][lazy-ass-helpful-devdependencies-url]
+
 ## Small print
 
 Author: Gleb Bahmutov &copy; 2014 @bahmutov
