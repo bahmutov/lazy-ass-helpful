@@ -33,7 +33,6 @@
     QUnit.equal(typeof wrappedFoo, 'function', 'wrapped is a function');
     wrappedFoo();
   });
-
 }());
 
 (function (root) {

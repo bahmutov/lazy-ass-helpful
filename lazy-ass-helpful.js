@@ -8,16 +8,15 @@ var falafel = require('falafel');
     var conditionNode = okStatement.expression.arguments[0];
     var condition = conditionNode.source();
     condition = condition.replace(/'/g, '"');
-    var helpfulMessage = '\'condition [' + condition + ']';
+    var helpfulMessage = '\'condition [' + condition + ']\'';
 
     var msgArg = okStatement.expression.arguments[1];
     if (msgArg) {
       var message = msgArg.source();
-      var strippedQuotes = message.replace(/'/g, '');
-      helpfulMessage += ', ' + strippedQuotes + '\'';
+      helpfulMessage += ', ' + message;
       msgArg.update(helpfulMessage);
     } else {
-      conditionNode.update(condition + ', ' + helpfulMessage + '\'');
+      conditionNode.update(condition + ', ' + helpfulMessage);
     }
   }
 
@@ -47,10 +46,10 @@ var falafel = require('falafel');
 
     var wrapped = function () {
       var testSource = fn.toString();
-      // console.log('test source', testSource);
-      // if (!fn.name) {
-      testSource = '(' + testSource + ')';
-      //}
+      // console.log('test source before\n' + testSource);
+      if (!fn.name) {
+        testSource = '(' + testSource + ')';
+      }
       //check.verify.unemptyString(fn.name,
       //  'for now qunit-helpful needs test function to have a name');
       var output = falafel(testSource, rewriteTestFunction);

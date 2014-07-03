@@ -1,7 +1,7 @@
 {
   "name": "lazy-ass-helpful",
   "description": "lazy-ass plugin to automatically show helpful info for failed assertions",
-  "version": "0.3.3",
+  "version": "0.3.5",
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "bugs": {
     "url": "https://github.com/bahmutov/lazy-ass-helpful/issues"
@@ -44,9 +44,15 @@
     "lazy-ass",
     "plugin",
     "help",
+    "assertion",
     "assertions",
     "context",
-    "info"
+    "info",
+    "helpful",
+    "bdd",
+    "tdd",
+    "qunit",
+    "mocha"
   ],
   "license": "MIT",
   "main": "lazy-ass-helpful.js",
