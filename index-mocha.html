@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>lazy-ass-helpful + mocha</title>
+  <link rel="stylesheet" href="node_modules/mocha/mocha.css" />
+</head>
+<body>
+  <a href="https://github.com/bahmutov/lazy-ass-helpful"><img style="position: fixed; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"
+  title="Fork me on GitHub - qunit-helpful"></a>
+
+  <h2>Each failed assertion will have helpful info</h2>
+  <p>Write each assertion using <a href="https://github.com/bahmutov/lazy-ass">lazy-ass</a> and
+  <a href="https://github.com/bahmutov/lazy-ass-helpful">lazy-ass-helpful</a> puts the expression into the message automatically.
+
+  <pre><code>
+  helpDescribe('a few tests using lazy-ass', function () {
+    it('puts expression into message', function () {
+      lazyAss('foo' + 2 + 4 === 'foo24');
+    });
+  });
+  </code></pre>
+
+  <p>Click on each test to expand to see the automatic messages</p>
+
+  <div id="mocha"></div>
+
+  <!-- include mocha first, then lazy-ass itself, then lazy-ass-helpful, then bdd interface, then tests -->
+  <script src="node_modules/mocha/mocha.js"></script>
+  <script>mocha.setup('bdd')</script>
+  <script src="node_modules/lazy-ass/index.js"></script>
+  <script src="lazy-ass-helpful-browser.js"></script>
+  <script src="lazy-ass-helpful-bdd.js"></script>
+  <script src="test/test-bdd.js"></script>
+  <script>
+    mocha.run();
+  </script>
+</body>
+</html>

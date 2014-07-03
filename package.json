@@ -1,7 +1,7 @@
 {
   "name": "lazy-ass-helpful",
   "description": "lazy-ass plugin to automatically show helpful info for failed assertions",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "bugs": {
     "url": "https://github.com/bahmutov/lazy-ass-helpful/issues"
@@ -22,6 +22,7 @@
     "grunt-contrib-watch": "0.6.1",
     "grunt-deps-ok": "0.2.0",
     "grunt-gh-pages": "0.9.1",
+    "grunt-mocha": "0.4.11",
     "grunt-nice-package": "0.5.2",
     "grunt-node-qunit": "2.0.2",
     "grunt-npm2bower-sync": "0.4.0",
@@ -30,6 +31,7 @@
     "jshint-summary": "0.4.0",
     "lazy-ass": "0.4.0",
     "matchdep": "0.3.0",
+    "mocha": "1.20.1",
     "pre-git": "0.0.16",
     "time-grunt": "0.3.2"
   },
@@ -49,7 +51,8 @@
   "license": "MIT",
   "main": "lazy-ass-helpful.js",
   "pre-commit": [
-    "grunt"
+    "grunt",
+    "npm run mocha"
   ],
   "pre-push": [
     "grunt"
@@ -59,7 +62,8 @@
     "url": "https://github.com/bahmutov/lazy-ass-helpful.git"
   },
   "scripts": {
-    "test": "grunt",
-    "gt": "node ./node_modules/gt node_modules/lazy-ass/index.js lazy-ass-helpful.js test/*.js --output --no-cover lazy-ass-helpful"
+    "test": "grunt && npm run mocha",
+    "gt": "node ./node_modules/gt node_modules/lazy-ass/index.js lazy-ass-helpful.js test/*.js --output --no-cover lazy-ass-helpful",
+    "mocha": "node ./node_modules/mocha/bin/mocha -R spec node_modules/lazy-ass/index.js lazy-ass-helpful.js lazy-ass-helpful-bdd.js test/test-bdd.js"
   }
 }

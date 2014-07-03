@@ -31,6 +31,7 @@ module.exports = function (grunt) {
       }
     },
 
+    /* testing in the browser and node */
     qunit: {
       all: ['index.html']
     },
