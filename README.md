@@ -3,7 +3,7 @@
 > lazy-ass plugin to automatically show helpful info for failed assertions
 
 [Test page](http://glebbahmutov.com/lazy-ass-helpful/),
-[tests with variable injection](http://glebbahmutov.com/lazy-ass-helpful/index-with-inject.html)
+[test page BDD (mocha)](http://glebbahmutov.com/lazy-ass-helpful/index-mocha.html)
 
 [![NPM][lazy-ass-helpful-icon]][lazy-ass-helpful-url]
 
