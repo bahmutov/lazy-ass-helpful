@@ -1,10 +1,11 @@
 {
   "name": "lazy-ass-helpful",
   "main": "lazy-ass-helpful-browser.js",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "lazy-ass plugin to automatically show helpful info for failed assertions",
   "keywords": [
     "lazy-ass",
+    "helpful",
     "test",
     "assert",
     "assertions",
@@ -21,7 +22,7 @@
     "index.html",
     "tests",
     "Gruntfile.js",
-    "qunit-inject.js",
+    "lazy-ass-helpful.js",
     "package.json"
   ],
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>"
