@@ -14,6 +14,29 @@
 Stop writing assertion messages, let the automatic on the fly code rewriting
 put the entire expression into the text message.
 
+## lazy-ass-helpful-bdd
+
+I include [lazy-ass-helpful-bdd.js](lazy-ass-helpful-bdd.js) that wraps the common BDD
+functions `describe` and `it` into `helpDescribe` and `helpIt`. These functions
+transform the unit test code using `lazyAssHelpful` method.
+
+Typical setup:
+
+```html
+<script src="node_modules/mocha/mocha.js"></script>
+<script>mocha.setup('bdd')</script>
+<script src="node_modules/lazy-ass/index.js"></script>
+<script src="lazy-ass-helpful-browser.js"></script>
+<script src="lazy-ass-helpful-bdd.js"></script>
+<script src="test/test-bdd.js"></script>
+<script>
+  mocha.run();
+</script>
+```
+
+The write unit test wrapped in `helpDescribe` function using `lazyAss` assertions.
+If an assertion fails, there will be helpful context.
+
 ![lazy-ass-helpful-bdd](images/lazy-ass-helpful-bdd.png)
 
 ## Small print
