@@ -15,8 +15,8 @@ Stop writing assertion messages, let the automatic on the fly code rewriting
 put the entire expression into the text message.
 
 This package provides single function `lazyAssHelpful` that transforms any given function
-with [lazy-ass assertions](https://github.com/bahmutov/lazy-ass) without extra info
-into.
+with [lazy-ass assertions](https://github.com/bahmutov/lazy-ass) into another function.
+If any lazy assertion fails, it will help its expression in the error message.
 
 **Example:**
 
