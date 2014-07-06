@@ -49,3 +49,16 @@ helpDescribe('a few tests using lazy-ass', function () {
     }
   });
 });
+
+helpDescribe('adds variables', function () {
+  it('adds vars from predicate expression', function () {
+    var foo = 'bar';
+    try {
+      lazyAss(foo === 'foo');
+    } catch (err) {
+      if (!/foo:/.test(err.message)) {
+        throw new Error('cannot find expected variable name in error message: ' + err.message);
+      }
+    }
+  });
+});

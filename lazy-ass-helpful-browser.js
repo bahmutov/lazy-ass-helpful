@@ -6,13 +6,14 @@ var falafel = require('falafel');
 (function (env) {
   var _assertionName = 'lazyAss';
 
-  function rewriteLazyAssMessage(okStatement) {
-    var conditionNode = okStatement.expression.arguments[0];
+  function rewriteLazyAssMessage(statement) {
+    var conditionNode = statement.expression.arguments[0];
     var condition = conditionNode.source();
+    console.log('condition\n' + condition);
     condition = condition.replace(/'/g, '"');
     var helpfulMessage = '\'condition [' + condition + ']\'';
 
-    var msgArg = okStatement.expression.arguments[1];
+    var msgArg = statement.expression.arguments[1];
     if (msgArg) {
       var message = msgArg.source();
       helpfulMessage += ', ' + message;
