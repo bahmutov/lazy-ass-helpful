@@ -3,14 +3,14 @@ var falafel = require('falafel');
 
 function grabVariables(foundVariableNames, node) {
   if (node.type === 'Identifier') {
-    console.log('grabVariables node type:', node.type, node.name);
+    // console.log('grabVariables node type:', node.type, node.name);
     foundVariableNames.push(node.name);
     // console.log('grabVariables node:', node);
   }
 }
 
 function excludedVars(opts) {
-  var exclude = opts.exclude || [];
+  var exclude = opts.exclude || opts.excludeVariables || [];
   if (typeof exclude === 'string') {
     exclude = [exclude];
   }

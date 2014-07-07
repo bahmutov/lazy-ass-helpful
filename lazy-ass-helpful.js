@@ -6,16 +6,24 @@ check.verify.fn(findVariables, 'could not find findVariables');
 (function (env) {
   var _assertionName = 'lazyAss';
 
-  function rewriteLazyAssMessage(statement) {
+  function rewriteLazyAssMessage(opts, statement) {
     var conditionNode = statement.expression.arguments[0];
     var condition = conditionNode.source();
-    var vars = findVariables(condition);
+    var vars = findVariables(condition, opts);
     check.verify.array(vars, 'could not find variables in condition ' + condition);
 
+    /*
     console.log('condition', condition, 'vars', vars);
+    console.log('opts', opts);
+    */
 
     condition = condition.replace(/'/g, '"');
     var helpfulMessage = '\'condition [' + condition + ']\'';
+    vars.forEach(function (variable) {
+      helpfulMessage += ',\n "' + variable + ':"';
+      helpfulMessage += ', typeof ' + variable + ' !== "undefined" && typeof ' +
+        variable + ' !== "function" ? ' + variable + ' : "skipped"';
+    });
 
     var msgArg = statement.expression.arguments[1];
     if (msgArg) {
@@ -26,6 +34,7 @@ check.verify.fn(findVariables, 'could not find findVariables');
       conditionNode.update(condition + ', ' + helpfulMessage);
     }
   }
+  var rewrite;
 
   function isLazyAss(statement) {
     return statement.expression.callee.name === _assertionName;
@@ -38,7 +47,7 @@ check.verify.fn(findVariables, 'could not find findVariables');
           statement.expression.type === 'CallExpression') {
 
           if (isLazyAss(statement)) {
-            rewriteLazyAssMessage(statement);
+            rewrite(statement);
           }
         }
       });
@@ -52,6 +61,8 @@ check.verify.fn(findVariables, 'could not find findVariables');
     _assertionName = opts.assertionName || 'lazyAss';
     check.verify.unemptyString(_assertionName,
       'invalid assertion name', _assertionName);
+
+    rewrite = rewriteLazyAssMessage.bind(null, opts);
 
     var wrapped = function () {
       var testSource = fn.toString();

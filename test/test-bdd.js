@@ -1,4 +1,4 @@
-/* global describe, it, helpDescribe, lazyAss */
+/* global describe, it, helpDescribe, lazyAss, check */
 if (typeof describe === 'undefined') {
   throw new Error('Cannot find describe function');
 }
@@ -52,12 +52,51 @@ helpDescribe('a few tests using lazy-ass', function () {
 
 helpDescribe('adds variables', function () {
   it('adds vars from predicate expression', function () {
+    function hasVariableName(str) {
+      return /foo:/.test(str);
+    }
+
+    function hasVariableValue(str) {
+      return /bar/.test(str);
+    }
+
     var foo = 'bar';
     try {
       lazyAss(foo === 'foo');
     } catch (err) {
-      if (!/foo:/.test(err.message)) {
+      // console.log('error message\n' + err.message);
+      if (!hasVariableName(err.message)) {
         throw new Error('cannot find expected variable name in error message: ' + err.message);
+      }
+      if (!hasVariableValue(err.message)) {
+        throw new Error('cannot find variable from expression value ' + err.message);
+      }
+    }
+  });
+
+  it('handles check-types in conditions', function () {
+    try {
+      lazyAss(check.unemptyString(2));
+    } catch (err) {
+      // console.log('error message\n' + err.message);
+      if (!/check\.unemptyString/.test(err.message)) {
+        throw new Error('Cannot find check in condition\n' + err.message);
+      }
+    }
+  });
+
+  it('check object is skipped by default', function () {
+    /* global lazyAssHelpfulBdd */
+    check.verify.fn(lazyAssHelpfulBdd, 'function lazyAssHelpfulBdd');
+    try {
+      lazyAss(check.unemptyString(2));
+    } catch (err) {
+      // console.log('error message\n' + err.message);
+      if (!/check\.unemptyString/.test(err.message)) {
+        throw new Error('Cannot find check in condition\n' + err.message);
+      }
+      if (/check:/.test(err.string)) {
+        throw new Error('Found check variable name in error message\n' + err.message);
       }
     }
   });
