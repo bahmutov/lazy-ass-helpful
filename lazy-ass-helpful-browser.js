@@ -2,6 +2,8 @@
 (function (global){
 var check = require('check-types');
 var falafel = require('falafel');
+var findVariables = require('./src/extract-vars');
+check.verify.fn(findVariables, 'could not find findVariables');
 
 (function (env) {
   var _assertionName = 'lazyAss';
@@ -9,7 +11,11 @@ var falafel = require('falafel');
   function rewriteLazyAssMessage(statement) {
     var conditionNode = statement.expression.arguments[0];
     var condition = conditionNode.source();
-    console.log('condition\n' + condition);
+    var vars = findVariables(condition);
+    check.verify.array(vars, 'could not find variables in condition ' + condition);
+
+    console.log('condition', condition, 'vars', vars);
+
     condition = condition.replace(/'/g, '"');
     var helpfulMessage = '\'condition [' + condition + ']\'';
 
@@ -101,7 +107,7 @@ var falafel = require('falafel');
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"check-types":2,"falafel":3}],2:[function(require,module,exports){
+},{"./src/extract-vars":5,"check-types":2,"falafel":3}],2:[function(require,module,exports){
 /**
  * This module exports functions for checking types
  * and throwing exceptions.
@@ -4634,4 +4640,38 @@ parseStatement: true, parseSourceElement: true */
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}]},{},[1])
+},{}],5:[function(require,module,exports){
+var check = require('check-types');
+var falafel = require('falafel');
+
+function grabVariables(foundVariableNames, node) {
+  if (node.type === 'Identifier') {
+    console.log('grabVariables node type:', node.type, node.name);
+    foundVariableNames.push(node.name);
+    // console.log('grabVariables node:', node);
+  }
+}
+
+function excludedVars(opts) {
+  var exclude = opts.exclude || [];
+  if (typeof exclude === 'string') {
+    exclude = [exclude];
+  }
+  return function (varName) {
+    return exclude.indexOf(varName) === -1;
+  };
+}
+
+function findVariables(src, opts) {
+  opts = opts || {};
+  var vars = [];
+  falafel(src, grabVariables.bind(null, vars));
+
+  vars = vars.filter(excludedVars(opts));
+
+  return vars;
+}
+
+module.exports = findVariables;
+
+},{"check-types":2,"falafel":3}]},{},[1])

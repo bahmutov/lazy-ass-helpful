@@ -1,5 +1,7 @@
 var check = require('check-types');
 var falafel = require('falafel');
+var findVariables = require('./src/extract-vars');
+check.verify.fn(findVariables, 'could not find findVariables');
 
 (function (env) {
   var _assertionName = 'lazyAss';
@@ -7,7 +9,11 @@ var falafel = require('falafel');
   function rewriteLazyAssMessage(statement) {
     var conditionNode = statement.expression.arguments[0];
     var condition = conditionNode.source();
-    console.log('condition\n' + condition);
+    var vars = findVariables(condition);
+    check.verify.array(vars, 'could not find variables in condition ' + condition);
+
+    console.log('condition', condition, 'vars', vars);
+
     condition = condition.replace(/'/g, '"');
     var helpfulMessage = '\'condition [' + condition + ']\'';
 

@@ -34,6 +34,7 @@
   <div id="mocha"></div>
 
   <!-- include mocha first, then lazy-ass itself, then lazy-ass-helpful, then bdd interface, then tests -->
+  <script src="node_modules/es5-shim/es5-shim.js"></script>
   <script src="node_modules/mocha/mocha.js"></script>
   <script>mocha.setup('bdd')</script>
   <script src="node_modules/lazy-ass/index.js"></script>
