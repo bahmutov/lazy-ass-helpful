@@ -49,7 +49,9 @@
   }
 
   QUnit.test('changed bar name', 2, function () {
-    var _foo = lazyAssHelpful(foo, 'bar');
+    var _foo = lazyAssHelpful(foo, {
+      assertionName: 'bar'
+    });
     QUnit.equal(typeof _foo, 'function');
     QUnit.throws(_foo, /ss/, 'throws exception with condition source');
   });
@@ -76,7 +78,9 @@
   }
 
   QUnit.test('running method', 1, function () {
-    lazyAssHelpful(env, 'run', 'bar');
+    lazyAssHelpful(env, 'run', {
+      assertionName: 'bar'
+    });
     QUnit.throws(function () {
       env.run('test foo', foo);
     }, /ss/, 'has helpful condition source');
@@ -123,6 +127,27 @@
     QUnit.throws(function () {
       env.run('test foo', foo);
     }, /check\.unemptyString/, 'has helpful condition source');
+  });
+
+}());
+
+(function () {
+  QUnit.module('adds condition variables to the message');
+
+  function bar() {
+    var foo = 'something';
+    lazyAss(foo === 'nothing');
+  }
+
+  var barHelped = lazyAssHelpful(bar);
+
+  QUnit.test('foo is in the arguments', 2, function () {
+    try {
+      barHelped();
+    } catch (err) {
+      QUnit.ok(/foo:/.test(err.message), 'message has foo variable name');
+      QUnit.ok(/something/.test(err.message), 'message has foo variable value');
+    }
   });
 
 }());

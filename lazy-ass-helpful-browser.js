@@ -2,17 +2,32 @@
 (function (global){
 var check = require('check-types');
 var falafel = require('falafel');
+var findVariables = require('./src/extract-vars');
+check.verify.fn(findVariables, 'could not find findVariables');
 
 (function (env) {
   var _assertionName = 'lazyAss';
 
-  function rewriteLazyAssMessage(okStatement) {
-    var conditionNode = okStatement.expression.arguments[0];
+  function rewriteLazyAssMessage(opts, statement) {
+    var conditionNode = statement.expression.arguments[0];
     var condition = conditionNode.source();
+    var vars = findVariables(condition, opts);
+    check.verify.array(vars, 'could not find variables in condition ' + condition);
+
+    /*
+    console.log('condition', condition, 'vars', vars);
+    console.log('opts', opts);
+    */
+
     condition = condition.replace(/'/g, '"');
     var helpfulMessage = '\'condition [' + condition + ']\'';
+    vars.forEach(function (variable) {
+      helpfulMessage += ',\n "' + variable + ':"';
+      helpfulMessage += ', typeof ' + variable + ' !== "undefined" && typeof ' +
+        variable + ' !== "function" ? ' + variable + ' : "skipped"';
+    });
 
-    var msgArg = okStatement.expression.arguments[1];
+    var msgArg = statement.expression.arguments[1];
     if (msgArg) {
       var message = msgArg.source();
       helpfulMessage += ', ' + message;
@@ -21,6 +36,7 @@ var falafel = require('falafel');
       conditionNode.update(condition + ', ' + helpfulMessage);
     }
   }
+  var rewrite;
 
   function isLazyAss(statement) {
     return statement.expression.callee.name === _assertionName;
@@ -33,18 +49,22 @@ var falafel = require('falafel');
           statement.expression.type === 'CallExpression') {
 
           if (isLazyAss(statement)) {
-            rewriteLazyAssMessage(statement);
+            rewrite(statement);
           }
         }
       });
     }
   }
 
-  function wrapSingleFunction(fn, assertionName) {
+  function wrapSingleFunction(fn, opts) {
     check.verify.fn(fn, 'Expected a function');
-    _assertionName = assertionName || 'lazyAss';
+    opts = opts || {};
+
+    _assertionName = opts.assertionName || 'lazyAss';
     check.verify.unemptyString(_assertionName,
       'invalid assertion name', _assertionName);
+
+    rewrite = rewriteLazyAssMessage.bind(null, opts);
 
     var wrapped = function () {
       var testSource = fn.toString();
@@ -64,14 +84,17 @@ var falafel = require('falafel');
     return wrapped;
   }
 
-  function wrapMethod(o, name, assertionName) {
+  function wrapMethod(o, name, opts) {
+    check.verify.unemptyString(name, 'missing method name');
+    opts = opts || {};
     var method = o[name];
     check.verify.fn(method, 'expected method ' + name + ' in object');
+
     var wrapped = function () {
       var args = Array.prototype.slice.call(arguments, 0);
       args = args.map(function (a) {
         if (check.fn(a)) {
-          a = wrapSingleFunction(a, assertionName);
+          a = wrapSingleFunction(a, opts);
         }
         return a;
       });
@@ -81,11 +104,12 @@ var falafel = require('falafel');
     return wrapped;
   }
 
-  env.lazyAssHelpful = function (a1, a2, a3) {
+  env.lazyAssHelpful = function (a1, a2, opts) {
     if (check.fn(a1)) {
-      return wrapSingleFunction(a1, a2);
+      opts = a2;
+      return wrapSingleFunction(a1, opts);
     } else if (check.object(a1) && check.unemptyString(a2)) {
-      return wrapMethod(a1, a2, a3);
+      return wrapMethod(a1, a2, opts);
     } else {
       throw new Error('Do not know how to handle arguments ' + a1 + ',' + a2);
     }
@@ -94,7 +118,7 @@ var falafel = require('falafel');
 
 
 }).call(this,typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"check-types":2,"falafel":3}],2:[function(require,module,exports){
+},{"./src/extract-vars":5,"check-types":2,"falafel":3}],2:[function(require,module,exports){
 /**
  * This module exports functions for checking types
  * and throwing exceptions.
@@ -4627,4 +4651,38 @@ parseStatement: true, parseSourceElement: true */
 }));
 /* vim: set sw=4 ts=4 et tw=80 : */
 
-},{}]},{},[1])
+},{}],5:[function(require,module,exports){
+var check = require('check-types');
+var falafel = require('falafel');
+
+function grabVariables(foundVariableNames, node) {
+  if (node.type === 'Identifier') {
+    // console.log('grabVariables node type:', node.type, node.name);
+    foundVariableNames.push(node.name);
+    // console.log('grabVariables node:', node);
+  }
+}
+
+function excludedVars(opts) {
+  var exclude = opts.exclude || opts.excludeVariables || [];
+  if (typeof exclude === 'string') {
+    exclude = [exclude];
+  }
+  return function (varName) {
+    return exclude.indexOf(varName) === -1;
+  };
+}
+
+function findVariables(src, opts) {
+  opts = opts || {};
+  var vars = [];
+  falafel(src, grabVariables.bind(null, vars));
+
+  vars = vars.filter(excludedVars(opts));
+
+  return vars;
+}
+
+module.exports = findVariables;
+
+},{"check-types":2,"falafel":3}]},{},[1])
