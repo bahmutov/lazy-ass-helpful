@@ -78,6 +78,8 @@ module.exports = function (grunt) {
         'node_modules/mocha/mocha.css',
         'node_modules/mocha/mocha.js',
         'node_modules/lazy-ass/index.js',
+        'node_modules/es5-shim/es5-shim.js',
+        'node_modules/check-types/src/check-types.js',
         'test/*.js'
       ]
     }

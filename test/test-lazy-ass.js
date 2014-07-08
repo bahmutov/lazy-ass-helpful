@@ -130,3 +130,24 @@
   });
 
 }());
+
+(function () {
+  QUnit.module('adds condition variables to the message');
+
+  function bar() {
+    var foo = 'something';
+    lazyAss(foo === 'nothing');
+  }
+
+  var barHelped = lazyAssHelpful(bar);
+
+  QUnit.test('foo is in the arguments', 2, function () {
+    try {
+      barHelped();
+    } catch (err) {
+      QUnit.ok(/foo:/.test(err.message), 'message has foo variable name');
+      QUnit.ok(/something/.test(err.message), 'message has foo variable value');
+    }
+  });
+
+}());

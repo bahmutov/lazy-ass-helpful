@@ -64,6 +64,22 @@ foo(); // Error: failed
 helpfulFoo(); // Error: condition [2 + 2 === 5]
 ```
 
+## Auto variables
+
+`lazyAssHelpful` not only places the expression into the message, it also parses
+the expression and puts all variables into the message (if they are defined and not functions)
+
+```js
+function bar() {
+  var foo = 'something';
+  lazyAss(foo === 'nothing');
+}
+var barHelped = lazyAssHelpful(bar);
+barHelped();
+// throws
+// Error: condition [foo === "nothing"] foo: something
+```
+
 ## Limitation
 
 Because `lazyAssHelpful` rewrites and evals the given function, it no longer can access
