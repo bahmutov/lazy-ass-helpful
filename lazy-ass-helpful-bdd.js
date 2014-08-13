@@ -1,7 +1,7 @@
 (function registerLazyAssHelpfulBdd(root) {
   root.lazyAssHelpfulBdd = function (opts) {
     opts = opts || {};
-    var assertionNames = opts.assertionNames || 'lazyAss';
+    var assertionNames = opts.assertionNames || ['lazyAss', 'la'];
 
     if (typeof root.lazyAssHelpful !== 'function') {
       throw new Error('Cannot find lazyAssHelpful function');
