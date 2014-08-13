@@ -1,7 +1,7 @@
 (function registerLazyAssHelpfulBdd(root) {
   root.lazyAssHelpfulBdd = function (opts) {
     opts = opts || {};
-    var assertionName = opts.assertionName || 'lazyAss';
+    var assertionNames = opts.assertionNames || 'lazyAss';
 
     if (typeof root.lazyAssHelpful !== 'function') {
       throw new Error('Cannot find lazyAssHelpful function');
@@ -19,7 +19,7 @@
 
     root.helpIt = function(name, cb) {
       root.it(name,
-        root.lazyAssHelpful(cb, assertionName, opts));
+        root.lazyAssHelpful(cb, assertionNames, opts));
     };
 
     root.helpDescribe = function (name, cb) {
@@ -28,20 +28,23 @@
     };
   };
 
-  var lazyAssName = (function checkLazyAssSetup() {
+  var lazyAssNames = (function checkLazyAssSetup() {
+    var names = [];
     if (typeof root.lazyAss === 'function') {
-      return 'lazyAss';
+      names.push('lazyAss');
     }
 
     if (typeof root.la === 'function') {
-      return 'la';
+      names.push('la');
     }
 
-    throw new Error('Cannot find lazyAss or la function');
+    if (!names.length) {
+      throw new Error('Cannot find lazyAss or la function');
+    }
   }());
 
   root.lazyAssHelpfulBdd({
-    assertionName: lazyAssName,
+    assertionNames: lazyAssNames,
     excludeVariables: ['check', '_', 'angular']
   });
 }(typeof window !== 'undefined' ? window : global));

@@ -1,4 +1,4 @@
-/* global describe, it, helpDescribe, lazyAss, check */
+/* global describe, it, helpDescribe, helpIt, lazyAss, la, check */
 if (typeof describe === 'undefined') {
   throw new Error('Cannot find describe function');
 }
@@ -15,6 +15,21 @@ if (typeof lazyAss === 'undefined') {
 describe('normal test suite', function () {
   it('still works', function () {
     lazyAss(2 + 2 === 4, 'addition');
+  });
+});
+
+describe('helpIt', function () {
+  la(typeof helpIt === 'function', 'helpIt is a function');
+
+  helpIt('lazyAss wrapped', function () {
+    try {
+      var foo = 5;
+      lazyAss(2 + 2 === foo, 'does not add to foo', foo);
+    } catch (err) {
+      lazyAss(/2 \+ 2 === foo/.test(err.message), err.message);
+      lazyAss(/does not add to foo/.test(err.message), err.message);
+      lazyAss(/5/.test(err.message), err.message);
+    }
   });
 });
 
