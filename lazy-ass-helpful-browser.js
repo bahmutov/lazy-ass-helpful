@@ -6,7 +6,7 @@ var findVariables = require('./src/extract-vars');
 check.verify.fn(findVariables, 'could not find findVariables');
 
 (function (env) {
-  var _assertionName = 'lazyAss';
+  var _assertionNames = ['lazyAss', 'la'];
 
   function rewriteLazyAssMessage(opts, statement) {
     var conditionNode = statement.expression.arguments[0];
@@ -39,7 +39,7 @@ check.verify.fn(findVariables, 'could not find findVariables');
   var rewrite;
 
   function isLazyAss(statement) {
-    return statement.expression.callee.name === _assertionName;
+    return _assertionNames.indexOf(statement.expression.callee.name) !== -1;
   }
 
   function rewriteTestFunction(node) {
@@ -60,10 +60,21 @@ check.verify.fn(findVariables, 'could not find findVariables');
     check.verify.fn(fn, 'Expected a function');
     opts = opts || {};
 
-    _assertionName = opts.assertionName || 'lazyAss';
-    check.verify.unemptyString(_assertionName,
-      'invalid assertion name', _assertionName);
+    if (check.unemptyString(opts.assertionName) &&
+      !check.array(opts.assertionNames)) {
+      opts.assertionNames = [opts.assertionName];
+    }
 
+    if (check.array(opts.assertionNames)) {
+      _assertionNames = opts.assertionNames;
+    }
+    check.verify.array(_assertionNames,
+      'invalid assertion names', _assertionNames);
+    _assertionNames.forEach(function (name, k) {
+      check.verify.unemptyString(name, 'invalid assertion name ' + name + ' at ' + k);
+    });
+
+    // console.log('opts', JSON.stringify(opts, null, 2));
     rewrite = rewriteLazyAssMessage.bind(null, opts);
 
     var wrapped = function () {
