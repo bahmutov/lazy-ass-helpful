@@ -1,5 +1,6 @@
 var check = require('check-types');
 var falafel = require('falafel');
+var bind = require('lodash.bind');
 
 function grabVariables(foundVariableNames, node) {
   if (node.type === 'Identifier') {
@@ -22,7 +23,7 @@ function excludedVars(opts) {
 function findVariables(src, opts) {
   opts = opts || {};
   var vars = [];
-  falafel(src, grabVariables.bind(null, vars));
+  falafel(src, bind(grabVariables, null, vars));
 
   vars = vars.filter(excludedVars(opts));
 

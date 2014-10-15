@@ -1,5 +1,6 @@
 var check = require('check-types');
 var falafel = require('falafel');
+var bind = require('lodash.bind');
 var findVariables = require('./src/extract-vars');
 check.verify.fn(findVariables, 'could not find findVariables');
 
@@ -73,7 +74,7 @@ check.verify.fn(findVariables, 'could not find findVariables');
     });
 
     // console.log('opts', JSON.stringify(opts, null, 2));
-    rewrite = rewriteLazyAssMessage.bind(null, opts);
+    rewrite = bind(rewriteLazyAssMessage, null, opts);
 
     var wrapped = function () {
       var testSource = fn.toString();
