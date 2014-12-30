@@ -165,7 +165,8 @@ check.verify.fn(findVariables, 'could not find findVariables');
         negativeNumber: negativeNumber,
         intNumber : intNumber,
         floatNumber : floatNumber,
-        number: number
+        number: number,
+        bool: bool
     };
 
     messages = {
@@ -190,7 +191,8 @@ check.verify.fn(findVariables, 'could not find findVariables');
         negativeNumber: 'Invalid number',
         intNumber: 'Invalid number',
         floatNumber: 'Invalid number',
-        number: 'Invalid number'
+        number: 'Invalid number',
+        bool: 'Invalid boolean'
     };
 
     functions = {
@@ -526,6 +528,18 @@ check.verify.fn(findVariables, 'could not find findVariables');
     }
 
     /**
+     * Public function `bool`.
+     *
+     * Returns `true` if something is a bool,
+     * `false` otherwise.
+     *
+     * @param thing The thing to test.
+     */
+    function bool (thing) {
+        return thing === false || thing === true;
+    }
+
+    /**
      * Public function `map`.
      *
      * Returns the results hash of mapping each predicate to the
@@ -690,7 +704,7 @@ check.verify.fn(findVariables, 'could not find findVariables');
             define(function () {
                 return functions;
             });
-        } else if (typeof module !== 'undefined' && module !== null) {
+        } else if (typeof module !== 'undefined' && module !== null && module.exports) {
             module.exports = functions;
         } else {
             globals.check = functions;
@@ -5299,4 +5313,4 @@ function findVariables(src, opts) {
 
 module.exports = findVariables;
 
-},{"check-types":2,"falafel":3,"lodash.bind":5}]},{},[1])
+},{"check-types":2,"falafel":3,"lodash.bind":5}]},{},[1]);
