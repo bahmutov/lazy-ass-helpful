@@ -60,7 +60,8 @@
   "main": "lazy-ass-helpful.js",
   "pre-commit": [
     "grunt",
-    "npm run mocha"
+    "npm run mocha",
+    "npm version"
   ],
   "pre-push": [
     "grunt"
