@@ -1,7 +1,7 @@
 {
   "name": "lazy-ass-helpful",
   "description": "lazy-ass plugin to automatically show helpful info for failed assertions",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "bugs": {
     "url": "https://github.com/bahmutov/lazy-ass-helpful/issues"

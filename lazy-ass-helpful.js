@@ -84,11 +84,25 @@ check.verify.fn(findVariables, 'could not find findVariables');
       }
       //check.verify.unemptyString(fn.name,
       //  'for now qunit-helpful needs test function to have a name');
-      var output = falafel(testSource, rewriteTestFunction);
-      // console.log('rewritten function\n' + output);
+      var output;
+      try {
+        output = falafel(testSource, rewriteTestFunction);
+        // console.log('rewritten function\n' + output);
+      } catch (err) {
+        console.error('Could not parse the following code\n' + testSource);
+        console.error(err.message);
+        throw err;
+      }
 
       /* jshint -W061 */
-      var helpfulFn = eval('(' + output + ')');
+      var helpfulFn;
+      try {
+        helpfulFn = eval('(' + output + ')');
+      } catch (err) {
+        console.error('Could not eval the following output\n' + output);
+        console.error(err.message);
+        throw err;
+      }
       return helpfulFn.apply(null, Array.prototype.slice.call(arguments, 0));
     };
     return wrapped;

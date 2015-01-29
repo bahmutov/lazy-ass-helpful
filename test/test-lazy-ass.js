@@ -12,6 +12,13 @@
     lazyAss(2 + 2 === 5, 'incorrect addition fails');
   }
 
+  function baz() {
+    console.log('in baz');
+    lazyAss({
+      foo: 'foo'
+    }.foo === 'foo2');
+  }
+
   QUnit.test('original function', 0, function () {
     foo();
   });
@@ -32,6 +39,15 @@
     var wrappedFoo = lazyAssHelpful(foo);
     QUnit.equal(typeof wrappedFoo, 'function', 'wrapped is a function');
     wrappedFoo();
+  });
+
+  QUnit.test('parse expression', function () {
+    QUnit.throws(baz, 'baz throws by itself');
+
+    var wrapped = lazyAssHelpful(baz);
+    QUnit.equal(typeof wrapped, 'function');
+    // wrapped();
+    QUnit.throws(wrapped, 'wrapped baz has parse error');
   });
 }());
 
